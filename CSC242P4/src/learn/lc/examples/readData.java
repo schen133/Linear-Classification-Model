@@ -22,7 +22,20 @@ public class readData {
     //The end of the data input is the output
     //examples have input array and outputs
     //input[], output
-    public static ArrayList<Example> readEarthData(String filename) throws FileNotFoundException {
+
+    protected int inputSize;
+
+    //when scanning a file with name
+    //constructor will set needed variables for classifier to use later
+    public readData(String filename) throws FileNotFoundException {
+
+    ArrayList<Example> arr = readEarthOrHouseData(filename);
+    inputSize = arr.get(0).inputs.length;
+    
+    }
+
+
+    public ArrayList<Example> readEarthData(String filename) throws FileNotFoundException {
         ArrayList<Example> arr = new ArrayList<Example>();
 
         Scanner scnr = new Scanner(new File(filename));
@@ -49,7 +62,7 @@ public class readData {
         return arr;
     }
 
-    public static ArrayList<Example> readEarthOrHouseData(String filename) throws FileNotFoundException {
+    public ArrayList<Example> readEarthOrHouseData(String filename) throws FileNotFoundException {
 
         ArrayList<Example> arr = new ArrayList<Example>();
         Scanner scnr = new Scanner(new File(filename));
@@ -103,13 +116,13 @@ public class readData {
     
     // ArrayList<Example> array = readEarthData("earthquake-clean.data.txt");
 
-    ArrayList<Example> arrForEarth = readEarthOrHouseData("earthquake-clean.data.txt");
+    // ArrayList<Example> arrForEarth = readEarthOrHouseData("earthquake-clean.data.txt");
 
-    ArrayList<Example> arrForHouse = readEarthOrHouseData("house-votes-84.data.num.txt");
+    // ArrayList<Example> arrForHouse = readEarthOrHouseData("house-votes-84.data.num.txt");
 
-    printArrayOfExamples(arrForEarth);
+    // printArrayOfExamples(arrForEarth);
     // System.out.println("GAPPP");
-    printArrayOfExamples(arrForHouse);
+    // printArrayOfExamples(arrForHouse);
 
     }
 
