@@ -1,5 +1,6 @@
+//Created by: Sifeng Chen
+//**Linear Classifiers testing file
 package learn.lc.examples;
-
 import java.io.FileNotFoundException;
 import learn.lc.core.LogisticClassifier;
 import learn.lc.core.PerceptronClassifier;
@@ -25,68 +26,91 @@ public class classifierTester {
     public static void main(String[] args) throws IOException {
     
         //For earthquake files (both clean and noisy)
+        //Text book requirements: 6 graphs total (3 each) AIMA 19.16(HardThreshold) and 19.18(Logistic)
         //a -> clean, any step, constant alpha
         testingPerceptron("earthquake-clean.data.txt", 1, 700);
+        testingLogistic("earthquake-clean.data.txt", 1, 5000);
 
         //b -> noisy, any step, constant alpha
-        testingPerceptron("earthquake-noisy.data.txt", 1, 75000);
+        testingPerceptron("earthquake-noisy.data.txt", 1, 100000);
+        testingLogistic("earthquake-noisy.data.txt", 1, 100000);
 
         //c -> noisy, any step, decaying learning alpha
-        testingPerceptron("earthquake-noisy.data.txt", 0, 75000);
+        testingPerceptron("earthquake-noisy.data.txt", 0, 100000);
+        testingLogistic("earthquake-noisy.data.txt", 0, 100000);
 
         //For house-votes numerical file
-        //a -> clean, any step, constant alpha
+        //6 graphs total: 
+        //a -> Small amount of updates, constant alpha
+        testingPerceptron("house-votes-84.data.num.txt", 1, 700);
+        testingLogistic("house-votes-84.data.num.txt", 1, 5000);
 
-        //b -> noisy, any step, constant alpha
+        //b -> Big amount of updates, constant alpha
+        testingPerceptron("house-votes-84.data.num.txt", 1, 100000);
+        testingLogistic("house-votes-84.data.num.txt", 1, 100000);
 
-        //c -> noisy, any step, decaying learning alpha
-
+        //c -> Big amount of updates, decaying learning alpha
+        testingPerceptron("house-votes-84.data.num.txt", 0, 100000);
+        testingLogistic("house-votes-84.data.num.txt", 0, 100000);
 	}
 
     //testing method for perceptron classifier
     public static void testingPerceptron(String filename, int alp, int updateNum) throws IOException{
-        //if file is earth, call readEarthData
-        //else, call readHouseData
-
         //-read data from a file
         readData data = new readData(filename);
         ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
-        FileWriter writer = new FileWriter("output.txt");
 
-        //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
-        PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
-        
         if(alp>0){    
-            System.out.println("this is for clean dataset any nsteps and any constant alpha");
+            System.out.println("this is for dataset any nsteps and any constant alpha");
+            //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+            PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize, "(H)(a:C)OutputConstantAlpha."+updateNum+"."+filename);
 
             //train dataset (while printing data needed for making graphs later)
             hardThreshold.train(dataSet, updateNum, alp);
+            hardThreshold.writer.close();
             // hardThreshold.accuracy(dataSet);
         }
         else{
-            System.out.println("this is for clean dataset any nsteps and decayingLearningRateSchedule alpha");
+            System.out.println("this is for dataset any nsteps and decayingLearningRateSchedule alpha");
+
+            //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+            PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize, "(H)(a:D)OutputDecayingAlpha."+updateNum+"."+filename);
 
             DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
 
             hardThreshold.train(dataSet, updateNum, rate);
+            hardThreshold.writer.close();
 
             }
 
     }
 
     //testing method for logistic classifier
-    public static void testingLogistic(String filename) throws FileNotFoundException{
-    //if file is earth, call readEarthData
-    //else, call readHouseData
+    public static void testingLogistic(String filename, int alp, int updateNum) throws IOException{
+        readData data = new readData(filename);
+        ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
+        // data.printArrayOfExamples(dataSet);
+        
+        if(alp>0){    
+            System.out.println("this is for dataset any nsteps and any constant alpha");
 
-    //-read data from a file
-    // readData data = new readData();
-    // data.readEarthOrHouseData(filename);
-    // readData data = new readData(fileName);
-    // ArrayList<Example> dataSet = data.readEarthData(fileName);
+            LogisticClassifier logistic = new LogisticClassifier(data.inputSize, "(L)(a:C)OutputConstantAlpha."+updateNum+"."+filename);
 
+            logistic.train(dataSet, updateNum, alp);
+            logistic.writer.close();
+            // hardThreshold.accuracy(dataSet);
+        }
+        else{
+            System.out.println("this is for dataset any nsteps and decayingLearningRateSchedule alpha");
 
-    //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+            LogisticClassifier logistic = new LogisticClassifier(data.inputSize, "(L)(a:D)OutputDecayingAlpha."+updateNum+"."+filename);
+
+            DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
+
+            logistic.train(dataSet, updateNum, rate);
+            logistic.writer.close();
+
+            }
 
     }
     

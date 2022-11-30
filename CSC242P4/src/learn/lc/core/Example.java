@@ -11,6 +11,7 @@ import java.util.Arrays;
  */
 public class Example {
 	
+	//x array
 	public double[] inputs;
 	public double output;
 	

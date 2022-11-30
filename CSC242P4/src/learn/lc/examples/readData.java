@@ -1,5 +1,6 @@
+//Created by: Sifeng Chen
+//**Data reading file
 package learn.lc.examples;
-
 import learn.lc.core.Example;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -33,7 +34,6 @@ public class readData {
     inputSize = arr.get(0).inputs.length;
     
     }
-
 
     public ArrayList<Example> readEarthData(String filename) throws FileNotFoundException {
         ArrayList<Example> arr = new ArrayList<Example>();

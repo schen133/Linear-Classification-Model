@@ -4,17 +4,23 @@ import java.util.List;
 import java.util.Random;
 
 import learn.math.util.VectorOps;
+import java.io.FileWriter;
+import java.io.IOException;
 
 abstract public class LinearClassifier {
 	
 	public double[] weights;
+
+	//constructor declares this writer as a new instance with a output file name
+	public FileWriter writer;
 	
 	public LinearClassifier(double[] weights) {
 		this.weights = weights;
 	}
 	
-	public LinearClassifier(int ninputs) {
+	public LinearClassifier(int ninputs, String outputFile) throws IOException {
 		this(new double[ninputs]);
+		writer = new FileWriter(outputFile);
 	}
 	
 	/**
@@ -44,8 +50,9 @@ abstract public class LinearClassifier {
 	 * ``Typically the learning rule is applied one example at a time,
 	 * choosing examples at random (as in stochastic gradient descent).''
 	 * See AIMA p. 724.
+	 * @throws IOException
 	 */
-	public void train(List<Example> examples, int nsteps, LearningRateSchedule schedule) {
+	public void train(List<Example> examples, int nsteps, LearningRateSchedule schedule) throws IOException {
 		Random random = new Random();
 		int n = examples.size();
 		for (int i=1; i <= nsteps; i++) {
@@ -59,8 +66,9 @@ abstract public class LinearClassifier {
 	/**
 	 * Train this LinearClassifier on the given Examples for the
 	 * given number of steps, using given constant learning rate.
+	 * @throws IOException
 	 */
-	public void train(List<Example> examples, int nsteps, double constant_alpha) {
+	public void train(List<Example> examples, int nsteps, double constant_alpha) throws IOException {
 		train(examples, nsteps, new LearningRateSchedule() {
 			public double alpha(int t) { return constant_alpha; }
 		});
@@ -69,9 +77,20 @@ abstract public class LinearClassifier {
 	/**
 	 * This method is called after each weight update during training.
 	 * Subclasses can override it to gather statistics or update displays.
+	 * @throws IOException
 	 */
-	protected void trainingReport(List<Example> examples, int stepnum, int nsteps) {
-		System.out.println(stepnum + "\t" + accuracy(examples));
+	protected void trainingReport(List<Example> examples, int stepnum, int nsteps) throws IOException {
+		// System.out.println(stepnum + "\t" + accuracy(examples));
+		//for logistic
+		// double oneMinusError = 1.0-squaredErrorPerSample(examples);
+		// 		System.out.println(stepnum + "\t" + oneMinusError);
+		//writing step and accuracy per update onto a output file
+		// try{
+		// this.writer.write(stepnum + " " + accuracy(examples) + "\n");
+		// } catch(IOException e){
+		// 	System.out.println("And error accured");
+		// }
+
 	}
 	
 	/**
