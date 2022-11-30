@@ -82,8 +82,7 @@ abstract public class LinearClassifier {
 	protected void trainingReport(List<Example> examples, int stepnum, int nsteps) throws IOException {
 		// System.out.println(stepnum + "\t" + accuracy(examples));
 		//for logistic
-		// double oneMinusError = 1.0-squaredErrorPerSample(examples);
-		// 		System.out.println(stepnum + "\t" + oneMinusError);
+		// System.out.println(stepnum + "\t" + (1.0-squaredErrorPerSample(examples)));
 		//writing step and accuracy per update onto a output file
 		// try{
 		// this.writer.write(stepnum + " " + accuracy(examples) + "\n");
