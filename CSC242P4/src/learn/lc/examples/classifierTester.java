@@ -1,5 +1,12 @@
 package learn.lc.examples;
 
+import java.io.FileNotFoundException;
+import learn.lc.core.LogisticClassifier;
+import learn.lc.core.PerceptronClassifier;
+import learn.lc.core.LinearClassifier;
+import learn.lc.core.Example;
+import java.util.ArrayList;
+
 // Running a LinearClassifier should generally do the following:
 //I will be doing all below steps within each testing methods
 // - Read the data from a file
@@ -32,21 +39,42 @@ public class classifierTester {
         //testingPerceptron(filename)
         //testingPerceptron(filename)
 
-
 	}
 
-    //testing method for logistic classifier
-    public static void testingLogistic(String filename){
-    //if file is earth, call readEarthData
-    //else, call readHouseData
+    //testing method for perceptron classifier (Hard Threshold)
+    public static void testingPerceptron(String filename) throws FileNotFoundException{
+        //if file is earth, call readEarthData
+        //else, call readHouseData
+
+        //-read data from a file
+        readData data = new readData(filename);
+        ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
+
+        //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+        PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
+        
+        for(Example ex: dataSet){
+            
+        }
+
+        //train dataset (while printing data needed for making graphs later)
+
+
+
 
     }
 
-    //testing method for perceptron classifier
-    public static void testingPerceptron(String filename){
+    //testing method for logistic classifier
+    public static void testingLogistic(String filename) throws FileNotFoundException{
     //if file is earth, call readEarthData
     //else, call readHouseData
-        
+
+    //-read data from a file
+    // readData data = new readData();
+    // data.readEarthOrHouseData(filename);
+
+    //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+
     }
     
 }
