@@ -4,8 +4,11 @@ import java.io.FileNotFoundException;
 import learn.lc.core.LogisticClassifier;
 import learn.lc.core.PerceptronClassifier;
 import learn.lc.core.LinearClassifier;
+import learn.lc.core.DecayingLearningRateSchedule;
 import learn.lc.core.Example;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
 
 // Running a LinearClassifier should generally do the following:
 //I will be doing all below steps within each testing methods
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 // - per-step accuracy suitable for plotting in a learning curve
 
 public class classifierTester {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         //within main method, ask user which classifier they want to test
         //with whatever the user's choices are, we call the corresponding
@@ -35,32 +38,51 @@ public class classifierTester {
         //testingLogistic(filename)
 
         //3 files
-        //testingPerceptron(filename)
-        //testingPerceptron(filename)
+        
+        
+        //a -> clean, any step, constant alpha, 
+        testingPerceptron("earthquake-clean.data.txt");
+
+        //b -> noisy, any step, any alpha
+        // testingPerceptron(filename);
+
+        //c -> noisy, any step, decaying learning alpha
         //testingPerceptron(filename)
 
 	}
 
-    //testing method for perceptron classifier (Hard Threshold)
-    public static void testingPerceptron(String filename) throws FileNotFoundException{
+    //testing method for perceptron classifier
+    public static void testingPerceptron(String filename) throws IOException{
         //if file is earth, call readEarthData
         //else, call readHouseData
-
-        //-read data from a file
-        readData data = new readData(filename);
-        ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
-
-        //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
-        PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
         
-        for(Example ex: dataSet){
+        if(filename.equals("earthquake-clean.data.txt")){
             
+            //-read data from a file
+            readData data = new readData(filename);
+            ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
+            FileWriter writer = new FileWriter("output.txt");
+
+            //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+            PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
+            
+            DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
+            
+            
+            System.out.println("this is for clean dataset any nsteps and any constant alpha");
+            hardThreshold.train(dataSet, 700, 1);
+            hardThreshold.accuracy(dataSet);
+
+            //train dataset (while printing data needed for making graphs later)
+        }else if(filename.equals("earthquake-noidy.data.txt")){
+
+        }else if(filename.equals("house-votes-84.data.num.txt")){
+
+        }else if(filename.equals("house-votes-84.names.num.txt")){
+
+        }else{
+            System.out.println("please insert a valid text file");
         }
-
-        //train dataset (while printing data needed for making graphs later)
-
-
-
 
     }
 
@@ -72,6 +94,9 @@ public class classifierTester {
     //-read data from a file
     // readData data = new readData();
     // data.readEarthOrHouseData(filename);
+    // readData data = new readData(fileName);
+    // ArrayList<Example> dataSet = data.readEarthData(fileName);
+
 
     //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
 
