@@ -23,66 +23,54 @@ import java.io.IOException;
 
 public class classifierTester {
     public static void main(String[] args) throws IOException {
+    
+        //For earthquake files (both clean and noisy)
+        //a -> clean, any step, constant alpha
+        testingPerceptron("earthquake-clean.data.txt", 1, 700);
 
-        //within main method, ask user which classifier they want to test
-        //with whatever the user's choices are, we call the corresponding
-        //Availiable files are:
-        //earthquake clean and noisy
-        //house votes numerical
-
-
-        //call testing methods to test for classifiers
-        //3 files
-        //testingLogistic(filename)
-        //testingLogistic(filename)
-        //testingLogistic(filename)
-
-        //3 files
-        
-        
-        //a -> clean, any step, constant alpha, 
-        testingPerceptron("earthquake-clean.data.txt");
-
-        //b -> noisy, any step, any alpha
-        // testingPerceptron(filename);
+        //b -> noisy, any step, constant alpha
+        testingPerceptron("earthquake-noisy.data.txt", 1, 75000);
 
         //c -> noisy, any step, decaying learning alpha
-        //testingPerceptron(filename)
+        testingPerceptron("earthquake-noisy.data.txt", 0, 75000);
+
+        //For house-votes numerical file
+        //a -> clean, any step, constant alpha
+
+        //b -> noisy, any step, constant alpha
+
+        //c -> noisy, any step, decaying learning alpha
 
 	}
 
     //testing method for perceptron classifier
-    public static void testingPerceptron(String filename) throws IOException{
+    public static void testingPerceptron(String filename, int alp, int updateNum) throws IOException{
         //if file is earth, call readEarthData
         //else, call readHouseData
-        
-        if(filename.equals("earthquake-clean.data.txt")){
-            
-            //-read data from a file
-            readData data = new readData(filename);
-            ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
-            FileWriter writer = new FileWriter("output.txt");
 
-            //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
-            PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
-            
-            DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
-            
-            
+        //-read data from a file
+        readData data = new readData(filename);
+        ArrayList<Example> dataSet = data.readEarthOrHouseData(filename);
+        FileWriter writer = new FileWriter("output.txt");
+
+        //-Create the appropriate type of LinearClassifier with the appropriate number of inputs for the data
+        PerceptronClassifier hardThreshold = new PerceptronClassifier(data.inputSize);
+        
+        if(alp>0){    
             System.out.println("this is for clean dataset any nsteps and any constant alpha");
-            hardThreshold.train(dataSet, 700, 1);
-            hardThreshold.accuracy(dataSet);
 
             //train dataset (while printing data needed for making graphs later)
-        }else if(filename.equals("earthquake-noidy.data.txt")){
-
-        }else if(filename.equals("house-votes-84.data.num.txt")){
-
-        }else if(filename.equals("house-votes-84.names.num.txt")){
-
-        }else{
-            System.out.println("please insert a valid text file");
+            hardThreshold.train(dataSet, updateNum, alp);
+            // hardThreshold.accuracy(dataSet);
         }
+        else{
+            System.out.println("this is for clean dataset any nsteps and decayingLearningRateSchedule alpha");
+
+            DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
+
+            hardThreshold.train(dataSet, updateNum, rate);
+
+            }
 
     }
 
