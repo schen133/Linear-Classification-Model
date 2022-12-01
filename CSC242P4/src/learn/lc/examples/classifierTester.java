@@ -70,6 +70,13 @@ public class classifierTester {
         System.out.println("\n");
         // ht.printArrayOfExamples(trainingSet);
 
+        DecayingLearningRateSchedule rate = new DecayingLearningRateSchedule();
+
+        LogisticClassifier lc = new LogisticClassifier(data.inputSize, "TestingFileOutput");
+        lc.test(dataSet, 10000, 20, 1);
+        lc.test(dataSet, 10000, 20, rate);
+        System.out.println("\n");
+
 
         ht.writer.close();
 
